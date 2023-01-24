@@ -1,16 +1,25 @@
-// Character constants
+const prompt = require("prompt-sync")({ sigint: true });
+
 const HAT = "^";
 const HOLE = "O";
 const FIELD_CHARACTER = "░";
 const PATH_CHARACTER = "*";
 
-const Settings = {
+
+const defaultSettings = {
     width: 16,
     height: 16,
     difficulty: 0.2
 };
 
-function generateField(settings = Settings){
+// const Settings = {
+//     width: prompt("Enter the width of the field: "),
+//     height: prompt("Enter the height of the field: "),
+//     difficulty: prompt("Enter the difficulty of the game (0.1 - 0.5): "),
+//   };
+
+
+  const generateField = (settings = defaultSettings) => {
     const { width, height, difficulty: percentage } = settings;
     const field = new Array(height).fill(FIELD_CHARACTER).map(() => new Array(width).fill(FIELD_CHARACTER));
     const hatLocation = {
@@ -31,7 +40,50 @@ function generateField(settings = Settings){
     return field;
     };
 
+
+const isWin = (field, location) => field[location.y][location.x] === HAT;
+const isOutOfBounds = (field, location) => location.x < 0 || location.x >= field[0].length || location.y < 0 || location.y >= field.length;
+const isHole = (field, location) => field[location.y][location.x] === HOLE;
+const movePlayer = (field, location) => {
+    const direction = prompt("Which way? ").toUpperCase();
+    console.clear();
+    switch (direction) {
+        case "W":
+        location.y--;
+        break;
+        case "S":
+        location.y++;
+        break;
+        case "A":
+        location.x--;
+        break;
+        case "D":
+        location.x++;
+        break;
+        default:
+        console.log("Invalid input");
+        break;
+    }
+    if (isOutOfBounds(field, location)) {
+        console.log("Out of bounds! Game over!");
+        return false;
+    }
+    if (isHole(field, location)) {
+        console.log("You fell in a hole! Game over!");
+        return false;
+    }
+    if (isWin(field, location)) {
+        console.log("You found your hat! You win!");
+        return false;
+    }
+    field[location.y][location.x] = PATH_CHARACTER;
+    return true;
+};
+
+
+
 module.exports = 
 {
-    generateField 
+    generateField, 
+    movePlayer,
 }
