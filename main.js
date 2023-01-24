@@ -1,18 +1,7 @@
 const prompt = require("prompt-sync")({ sigint: true });
-
-const hat = "^";
-const hole = "O";
-const fieldCharacter = "░";
-const pathCharacter = "*";
-
+const { generateField } = require("./util");
 class Field {
-  constructor(
-    field = [
-      ["*", "░", "O"],
-      ["░", "O", "░"],
-      ["░", "^", "░"],
-    ]
-  ) {
+  constructor(field = generateField()) {
     this.field = field;
   }
   print() {
