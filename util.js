@@ -34,7 +34,7 @@ const defaultSettings = {
         field[y][x] = HOLE;
         holeCount++;
         }
-    }
+    }    
     field[0][0] = PATH_CHARACTER;
     field[hatLocation.y][hatLocation.x] = HAT;
     return field;
